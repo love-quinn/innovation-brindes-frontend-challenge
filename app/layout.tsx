@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthInitializer from "@/components/AuthInitializer";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { ToastContainer } from "react-toastify";
+import { SkipToContent } from "@/components/SkipToContent";
 
 const poppins = Poppins({
     weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -26,8 +27,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`$${poppins.className} antialiased bg-white`}
+        className={`${poppins.className} antialiased bg-white`}
       >
+        <SkipToContent />
         <ReactQueryProvider>
             <ToastContainer aria-label="Toast Notifications" />
             <AuthInitializer />

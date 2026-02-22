@@ -1,11 +1,16 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, Phone } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { ProductsSection } from "@/components/ProductsSection";
-import { ProductModal } from "@/components/ProductModal";
+
+const ProductModal = dynamic(
+  () => import("@/components/ProductModal").then((m) => ({ default: m.ProductModal })),
+  { ssr: false }
+);
 
 function formatDatePT(date: Date) {
   const str = date.toLocaleDateString("pt-BR", {
@@ -94,7 +99,7 @@ export default function ProdutosPage() {
         </div>
       </header>
 
-      <main className="p-4 md:p-8 max-w-6xl mx-auto">
+      <main id="main-content" className="p-4 md:p-8 max-w-6xl mx-auto" tabIndex={-1}>
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 pb-4 mb-6">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800">
             Produtos
@@ -102,7 +107,7 @@ export default function ProdutosPage() {
           <button
             type="button"
             onClick={() => logout()}
-            className="cursor-pointer text-sm text-red-600 hover:text-red-700 hover:underline"
+            className="cursor-pointer text-sm text-red-600 hover:text-red-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 rounded"
           >
             Sair
           </button>

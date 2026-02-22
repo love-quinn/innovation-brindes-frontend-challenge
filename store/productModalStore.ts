@@ -4,13 +4,22 @@ import type { Product } from "@/services/products";
 interface ProductModalState {
   isOpen: boolean;
   product: Product | null;
-  open: (product: Product) => void;
+  returnFocusElement: HTMLElement | null;
+  open: (product: Product, triggerElement?: HTMLElement | null) => void;
   close: () => void;
 }
 
-export const useProductModalStore = create<ProductModalState>((set) => ({
+export const useProductModalStore = create<ProductModalState>((set, get) => ({
   isOpen: false,
   product: null,
-  open: (product) => set({ isOpen: true, product }),
-  close: () => set({ isOpen: false, product: null }),
+  returnFocusElement: null,
+  open: (product, triggerElement) =>
+    set({ isOpen: true, product, returnFocusElement: triggerElement ?? null }),
+  close: () => {
+    const el = get().returnFocusElement;
+    set({ isOpen: false, product: null, returnFocusElement: null });
+    if (typeof requestAnimationFrame !== "undefined" && el?.focus) {
+      requestAnimationFrame(() => el.focus());
+    }
+  },
 }));

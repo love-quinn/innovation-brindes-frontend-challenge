@@ -87,18 +87,24 @@ export default function LoginPage() {
             <FaUserAlt
               size="1em"
               className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none z-10"
+              aria-hidden
             />
+            <label htmlFor="login-email" className="sr-only">
+              Usuário
+            </label>
             <input
+              id="login-email"
               type="text"
               placeholder="Usuário"
-              className="w-full bg-white text-[#5d5d5d] rounded-4xl pl-10 md:pl-14 pr-3 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoComplete="username"
+              className="w-full bg-white text-[#5d5d5d] rounded-4xl pl-10 md:pl-14 pr-3 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500"
               {...register("email", {
                 required: "O usuário é obrigatório",
               })}
             />
           </div>
           {errors.email && (
-            <p className="text-red-500 text-sm">
+            <p className="text-red-500 text-sm" role="alert">
               {errors.email.message}
             </p>
           )}
@@ -108,18 +114,24 @@ export default function LoginPage() {
             <FaUnlockAlt
               size="1em"
               className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none z-10"
+              aria-hidden
             />
+            <label htmlFor="login-senha" className="sr-only">
+              Senha
+            </label>
             <input
+              id="login-senha"
               type="password"
               placeholder="Senha"
-              className="w-full bg-white text-[#5d5d5d] rounded-4xl pl-10 md:pl-14 pr-3 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoComplete="current-password"
+              className="w-full bg-white text-[#5d5d5d] rounded-4xl pl-10 md:pl-14 pr-3 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500"
               {...register("senha", {
                 required: "A senha é obrigatória",
               })}
             />
           </div>
           {errors.senha && (
-            <p className="text-red-500 text-sm">
+            <p className="text-red-500 text-sm" role="alert">
               {errors.senha.message}
             </p>
           )}
@@ -154,18 +166,20 @@ export default function LoginPage() {
             </a>
           </div>
 
-          {/* ROOT ERROR */}
-          {errors.root && (
-            <p className="text-red-500 text-sm">
-              {errors.root.message}
-            </p>
-          )}
+          {/* ROOT ERROR - aria-live for screen readers */}
+          <div aria-live="polite" aria-atomic="true" className="min-h-5">
+            {errors.root && (
+              <p className="text-red-500 text-sm" role="alert">
+                {errors.root.message}
+              </p>
+            )}
+          </div>
 
           {/* BUTTON */}
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full cursor-pointer md:w-[50%] bg-white text-gray-600 py-2.5 md:py-2 rounded-md hover:bg-gray-200 transition text-sm md:text-base"
+            className="w-full cursor-pointer md:w-[50%] bg-white text-gray-600 py-2.5 md:py-2 rounded-md hover:bg-gray-200 transition text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#80bc04] focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#80bc04]"
           >
             {mutation.isPending ? "Entrando..." : "Login"}
           </button>

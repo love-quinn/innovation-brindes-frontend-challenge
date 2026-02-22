@@ -49,12 +49,13 @@ export function ProductCard({ product }: { product: Product }) {
 
         {/* IMAGEM + selo + embalagem */}
         <div className="relative bg-white pb-10 flex items-center justify-center">
-          <div className="relative w-full aspect-square max-h-[170px] overflow-visible">
+          <div className="relative w-full aspect-square max-h-[170px] overflow-visible min-h-[120px]">
             <Image
               src={product.imagem || "/placeholder.png"}
               alt={product.nome}
               fill
               className="object-contain"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
 
             {/* Favorito (top-left) - click não abre modal */}
@@ -65,7 +66,7 @@ export function ProductCard({ product }: { product: Product }) {
                 toggleFavorite(product.codigo);
               }}
               aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-              className="absolute top-2 left-2 z-20 p-1.5 rounded-full bg-white/90 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-1"
+              className="absolute top-2 left-2 z-20 p-1.5 rounded-full bg-white/90 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-[#80bc04] focus-visible:ring-offset-1"
             >
               <Heart
                 className={`size-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-400"}`}
@@ -84,11 +85,11 @@ export function ProductCard({ product }: { product: Product }) {
               className="absolute -bottom-10 left-0 w-fit border border-l-0 rounded-t-lg bg-white p-2
                  flex items-center gap-2 overflow-visible z-20"
             >
-              {/* ÍCONE (overflow pra cima) */}
-              <div className="absolute -top-2 bg-white left-1 w-14 h-14">
+              {/* ÍCONE decorativo (overflow pra cima) */}
+              <div className="absolute -top-2 bg-white left-1 w-14 h-14" aria-hidden>
                 <Image
                   src="/box.png"
-                  alt={product.nome}
+                  alt=""
                   fill
                   className="object-contain"
                 />
@@ -115,8 +116,8 @@ export function ProductCard({ product }: { product: Product }) {
           </p>
         )}
 
-        {/* cores */}
-        <div className="flex flex-col items-start gap-1.5 px-3 py-2 flex-wrap">
+        {/* cores (decorativo) */}
+        <div className="flex flex-col items-start gap-1.5 px-3 py-2 flex-wrap" aria-hidden>
           <p className="text-gray-700 font-bold text-xs">Cores:</p>
           <div className="grid grid-cols-4">
             {PLACEHOLDER_COLORS.map((color, i) => (
@@ -147,8 +148,8 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="p-3 pt-1 mt-auto">
         <button
           type="button"
-          onClick={() => openModal(product)}
-          className="w-full bg-[#80bc04] text-white text-sm font-semibold py-2 rounded hover:bg-[#6fa803] transition focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2"
+          onClick={(e) => openModal(product, e.currentTarget)}
+          className="w-full bg-[#80bc04] text-white text-sm font-semibold py-2 rounded hover:bg-[#6fa803] transition focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2 focus-visible:ring-2 focus-visible:ring-[#80bc04] focus-visible:ring-offset-2"
         >
           CONFIRA
         </button>

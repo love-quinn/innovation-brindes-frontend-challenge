@@ -79,20 +79,26 @@ export function ProductsSection() {
       {/* Busca + Ordenação */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" aria-hidden />
+          <label htmlFor="products-search" className="sr-only">
+            Buscar por nome ou código
+          </label>
           <input
+            id="products-search"
             type="search"
             placeholder="Buscar por nome ou código..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full md:w-72 pl-9 pr-3 py-2 border text-gray-900 border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:border-transparent"
+            aria-label="Buscar por nome ou código do produto"
+            className="w-full md:w-72 pl-9 pr-3 py-2 border text-gray-900 border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:border-transparent focus-visible:ring-2"
           />
         </div>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => toggleSort("nome")}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border bg-white hover:bg-gray-50 ${
+            aria-label={sortBy === "nome" ? `Ordenar por nome ${sortOrder === "asc" ? "A a Z" : "Z a A"}` : "Ordenar por nome"}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium border bg-white hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#80bc04] focus-visible:ring-offset-2 ${
               sortBy === "nome"
                 ? "border-[#80bc04] bg-[#80bc04]/10 text-[#80bc04]"
                 : "border-gray-300 text-gray-700"
@@ -103,7 +109,8 @@ export function ProductsSection() {
           <button
             type="button"
             onClick={() => toggleSort("preco")}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border bg-white hover:bg-gray-50 ${
+            aria-label={sortBy === "preco" ? `Ordenar por preço ${sortOrder === "asc" ? "menor primeiro" : "maior primeiro"}` : "Ordenar por preço"}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium border bg-white hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#80bc04] focus-visible:ring-offset-2 ${
               sortBy === "preco"
                 ? "border-[#80bc04] bg-[#80bc04]/10 text-[#80bc04]"
                 : "border-gray-300 text-gray-700"
@@ -131,7 +138,7 @@ export function ProductsSection() {
           <button
             type="button"
             onClick={() => refetch()}
-            className="px-4 py-2 rounded-lg bg-[#80bc04] text-white text-sm font-medium hover:bg-[#6fa803] transition focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2"
+            className="px-4 py-2 rounded-lg bg-[#80bc04] text-white text-sm font-medium hover:bg-[#6fa803] transition focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2 focus-visible:ring-2 focus-visible:ring-[#80bc04] focus-visible:ring-offset-2"
           >
             Tentar novamente
           </button>

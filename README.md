@@ -29,6 +29,10 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Lighthouse (ETAPA 15)
+
+Para Performance e Accessibility ≥ 90 no Lighthouse (Desktop): build com `npm run build && npm run start`, abra DevTools → Lighthouse → Desktop → Analyze. Checklist e screenshots: [LIGHTHOUSE.md](./LIGHTHOUSE.md).
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
