@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -16,8 +17,15 @@ interface LoginFormData {
 
 export default function LoginPage() {
   const router = useRouter();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const loginStore = useAuthStore((state) => state.login);
-  const {  notifySuccess, notifyError } = useNotification();
+  const { notifySuccess, notifyError } = useNotification();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/produtos");
+    }
+  }, [isAuthenticated, router]);
 
   const {
     register,
