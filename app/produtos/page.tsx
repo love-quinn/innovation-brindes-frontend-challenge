@@ -23,7 +23,7 @@ export default function ProdutosPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 bg-white text-gray-900">
         <p className="text-gray-600">Você precisa estar logado para acessar esta página.</p>
         <Link
           href="/login"

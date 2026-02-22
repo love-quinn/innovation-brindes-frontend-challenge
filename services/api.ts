@@ -1,5 +1,6 @@
 import axios from "axios"
 import { AUTH_TOKEN_KEY } from "@/lib/auth-constants"
+import { useAuthStore } from "@/store/authStore"
 
 const API_BASE_URL =
   "https://apihomolog.innovationbrindes.com.br/api/innova-dinamica"
@@ -34,17 +35,14 @@ api.interceptors.request.use(
 
 /**
  * RESPONSE INTERCEPTOR
- * Se receber 401 → força logout
+ * 401 → logout (Zustand + localStorage + cookie) e redirect /login
  */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Remove token
-      if (typeof window !== "undefined") {
-        localStorage.removeItem(AUTH_TOKEN_KEY)
-        window.location.href = "/login"
-      }
+    if (error.response?.status === 401 && typeof window !== "undefined") {
+      useAuthStore.getState().logout()
+      window.location.href = "/login"
     }
 
     return Promise.reject(error)

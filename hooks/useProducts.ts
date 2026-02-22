@@ -84,6 +84,7 @@ export function useProducts() {
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 0,
     staleTime: 2 * 60 * 1000,
+    retry: 1,
   });
 
   const products = query.data?.pages.flatMap((p) => p.items) ?? [];
@@ -121,6 +122,7 @@ export function useProducts() {
     isFetchingNextPage,
     isLoading: query.isLoading,
     isError: query.isError,
+    error: query.error,
     refetch: query.refetch,
     isEmpty,
   };

@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { ProductCard } from "./ProductCard";
+import { ProductGridSkeleton } from "./ProductGridSkeleton";
 
 export function ProductsSection() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -28,6 +29,8 @@ export function ProductsSection() {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
+    isError,
+    refetch,
     isEmpty,
   } = useProducts();
 
@@ -111,15 +114,27 @@ export function ProductsSection() {
         </div>
       </div>
 
-      {/* Grid de produtos (5 colunas no desktop, como na referência) */}
+      {/* Grid de produtos */}
       {isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-xl border border-gray-200 bg-gray-100 aspect-3/4 animate-pulse"
-            />
-          ))}
+        <ProductGridSkeleton count={10} aria-label="Carregando produtos" />
+      ) : isError ? (
+        <div
+          className="text-center py-12 px-4 bg-gray-50 rounded-xl border border-gray-200"
+          role="alert"
+        >
+          <p className="text-gray-700 font-medium">
+            Não foi possível carregar os produtos.
+          </p>
+          <p className="text-gray-500 text-sm mt-1 mb-4">
+            Verifique sua conexão e tente novamente.
+          </p>
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="px-4 py-2 rounded-lg bg-[#80bc04] text-white text-sm font-medium hover:bg-[#6fa803] transition focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2"
+          >
+            Tentar novamente
+          </button>
         </div>
       ) : favoritesFilterEmpty ? (
         <div className="text-center py-12 px-4 bg-gray-50 rounded-xl border border-gray-200">
@@ -153,8 +168,8 @@ export function ProductsSection() {
           </div>
           <div ref={loadMoreRef} className="h-4 mt-4" aria-hidden />
           {isFetchingNextPage && (
-            <div className="flex justify-center py-6">
-              <span className="text-sm text-gray-500">Carregando mais...</span>
+            <div className="mt-4">
+              <ProductGridSkeleton count={4} aria-label="Carregando mais produtos" />
             </div>
           )}
         </>
