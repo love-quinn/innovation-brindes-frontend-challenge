@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { Gift } from "lucide-react";
+import { Gift, Heart } from "lucide-react";
 import type { Product } from "@/services/products";
 import { useProductModalStore } from "@/store/productModalStore";
+import { useFavoritesStore } from "@/store/favoritesStore";
 
 function formatPrice(preco: string) {
   const n = parseFloat(preco);
@@ -26,6 +27,8 @@ const PLACEHOLDER_COLORS = [
 
 export function ProductCard({ product }: { product: Product }) {
   const openModal = useProductModalStore((s) => s.open);
+  const isFavorite = useFavoritesStore((s) => s.isFavorite(product.codigo));
+  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
   const desc = product.descricao?.trim() ?? "";
   const descriptionSnippet =
     desc.length > 70 ? desc.slice(0, 70).trim() + "..." : desc || "";
@@ -53,6 +56,23 @@ export function ProductCard({ product }: { product: Product }) {
               fill
               className="object-contain"
             />
+
+            {/* Favorito (top-left) - click não abre modal */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavorite(product.codigo);
+              }}
+              aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+              className="absolute top-2 left-2 z-20 p-1.5 rounded-full bg-white/90 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-1"
+            >
+              <Heart
+                className={`size-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-400"}`}
+                strokeWidth={2}
+                aria-hidden
+              />
+            </button>
 
             {/* selo EXCLUSIVO */}
             <span className="absolute top-0 right-0 bg-gray-100 text-[#20b3ca] text-xs font-bold px-2 py-[2px] rounded z-20">

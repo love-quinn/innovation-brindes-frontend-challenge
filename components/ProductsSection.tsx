@@ -1,12 +1,22 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
+import { useFavoritesStore } from "@/store/favoritesStore";
 import { ProductCard } from "./ProductCard";
 
 export function ProductsSection() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+
+  const hydrate = useFavoritesStore((s) => s.hydrate);
+  const favoriteIds = useFavoritesStore((s) => s.favoriteIds);
+
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
+
   const {
     products,
     search,
@@ -20,6 +30,14 @@ export function ProductsSection() {
     isLoading,
     isEmpty,
   } = useProducts();
+
+  const displayProducts = useMemo(() => {
+    if (!showOnlyFavorites) return products;
+    return products.filter((p) => favoriteIds.includes(p.codigo));
+  }, [products, showOnlyFavorites, favoriteIds]);
+
+  const favoritesFilterEmpty =
+    showOnlyFavorites && displayProducts.length === 0 && !isLoading;
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;
@@ -37,6 +55,24 @@ export function ProductsSection() {
 
   return (
     <section className="space-y-6">
+      {/* Filtro "Mostrar apenas favoritos" */}
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={showOnlyFavorites}
+            onChange={(e) => setShowOnlyFavorites(e.target.checked)}
+            className="rounded border-gray-300 text-[#80bc04] focus:ring-[#80bc04]"
+          />
+          <span className="text-sm text-gray-700">Mostrar apenas favoritos</span>
+        </label>
+        {showOnlyFavorites && favoriteIds.length > 0 && (
+          <span className="text-xs text-gray-500">
+            ({favoriteIds.length} favorito{favoriteIds.length !== 1 ? "s" : ""})
+          </span>
+        )}
+      </div>
+
       {/* Busca + Ordenação */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="relative">
@@ -85,6 +121,22 @@ export function ProductsSection() {
             />
           ))}
         </div>
+      ) : favoritesFilterEmpty ? (
+        <div className="text-center py-12 px-4 bg-gray-50 rounded-xl border border-gray-200">
+          <p className="text-gray-600 font-medium">
+            Você ainda não tem favoritos ou eles foram removidos.
+          </p>
+          <p className="text-gray-500 text-sm mt-1 mb-4">
+            Desmarque o filtro para ver todos os produtos e adicione favoritos.
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowOnlyFavorites(false)}
+            className="px-4 py-2 rounded-lg bg-[#80bc04] text-white text-sm font-medium hover:bg-[#6fa803] transition focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2"
+          >
+            Mostrar todos os produtos
+          </button>
+        </div>
       ) : isEmpty ? (
         <div className="text-center py-12 px-4 bg-gray-50 rounded-xl border border-gray-200">
           <p className="text-gray-600 font-medium">Nenhum produto encontrado.</p>
@@ -95,7 +147,7 @@ export function ProductsSection() {
       ) : (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
-            {products.map((product) => (
+            {displayProducts.map((product) => (
               <ProductCard key={product.codigo} product={product} />
             ))}
           </div>
