@@ -1,4 +1,5 @@
 import axios from "axios"
+import { AUTH_TOKEN_KEY } from "@/lib/auth-constants"
 
 const API_BASE_URL =
   "https://apihomolog.innovationbrindes.com.br/api/innova-dinamica"
@@ -17,7 +18,7 @@ export const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem(AUTH_TOKEN_KEY)
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`
@@ -41,7 +42,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Remove token
       if (typeof window !== "undefined") {
-        localStorage.removeItem("token")
+        localStorage.removeItem(AUTH_TOKEN_KEY)
         window.location.href = "/login"
       }
     }

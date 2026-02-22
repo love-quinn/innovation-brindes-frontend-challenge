@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`$${poppins.className} antialiased`}
+        className={`$${poppins.className} antialiased bg-white`}
       >
         <ReactQueryProvider>
             <ToastContainer aria-label="Toast Notifications" />
