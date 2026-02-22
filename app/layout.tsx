@@ -11,7 +11,10 @@ const poppins = Poppins({
   });
 
 export const metadata: Metadata = {
-  title: "Innovation Brindes",
+  title: {
+    default: "Innovation Brindes",
+    template: "%s | Innovation Brindes",
+  },
   description: "Mini aplicação para listagem de produtos",
 };
 
