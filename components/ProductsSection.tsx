@@ -82,7 +82,7 @@ export function ProductsSection() {
             placeholder="Buscar por nome ou código..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full md:w-72 pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:border-transparent"
+            className="w-full md:w-72 pl-9 pr-3 py-2 border text-gray-900 border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:border-transparent"
           />
         </div>
         <div className="flex flex-wrap gap-2">
