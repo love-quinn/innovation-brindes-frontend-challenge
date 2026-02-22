@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Mail, Phone } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { ProductsSection } from "@/components/ProductsSection";
+import { ProductModal } from "@/components/ProductModal";
 
 function formatDatePT(date: Date) {
   const str = date.toLocaleDateString("pt-BR", {
@@ -108,6 +109,7 @@ export default function ProdutosPage() {
         </div>
 
         <ProductsSection />
+        <ProductModal />
 
         {/* Dados do usuário (resumido) */}
         <section className="mt-10 pt-8 border-t border-gray-200">

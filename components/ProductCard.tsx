@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Gift } from "lucide-react";
 import type { Product } from "@/services/products";
+import { useProductModalStore } from "@/store/productModalStore";
 
 function formatPrice(preco: string) {
   const n = parseFloat(preco);
@@ -24,6 +25,7 @@ const PLACEHOLDER_COLORS = [
 ];
 
 export function ProductCard({ product }: { product: Product }) {
+  const openModal = useProductModalStore((s) => s.open);
   const desc = product.descricao?.trim() ?? "";
   const descriptionSnippet =
     desc.length > 70 ? desc.slice(0, 70).trim() + "..." : desc || "";
@@ -123,7 +125,11 @@ export function ProductCard({ product }: { product: Product }) {
         {/* botão */}
       </article>
       <div className="p-3 pt-1 mt-auto">
-        <button className="w-full bg-[#80bc04] text-white text-sm font-semibold py-2 rounded hover:bg-[#6fa803] transition">
+        <button
+          type="button"
+          onClick={() => openModal(product)}
+          className="w-full bg-[#80bc04] text-white text-sm font-semibold py-2 rounded hover:bg-[#6fa803] transition focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2"
+        >
           CONFIRA
         </button>
       </div>
