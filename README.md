@@ -2,6 +2,8 @@
 
 Aplicação web para listagem de produtos (brindes), com login, favoritos, busca, ordenação e modal de detalhes. Desenvolvida em Next.js (App Router) + TypeScript como desafio front-end.
 
+**Hospedagem (Vercel):** [innovation-brindes-frontend-challen.vercel.app](https://innovation-brindes-frontend-challen.vercel.app)
+
 ---
 
 ## Funcionalidades implementadas
@@ -47,8 +49,20 @@ docker run --rm -p 3000:3000 innovation-brindes
 
 ### 3. Acessar a aplicação
 
+**Local (Docker):**
 - **Login:** [http://localhost:3000/login](http://localhost:3000/login)
 - **Produtos (após login):** [http://localhost:3000/produtos](http://localhost:3000/produtos)
+
+**Produção (Vercel):** [innovation-brindes-frontend-challen.vercel.app](https://innovation-brindes-frontend-challen.vercel.app) — [Login](https://innovation-brindes-frontend-challen.vercel.app/login) · [Produtos](https://innovation-brindes-frontend-challen.vercel.app/produtos)
+
+### Login para teste (API de homologação)
+
+Use as credenciais abaixo para validar o fluxo com a API:
+
+| Campo    | Valor     |
+|----------|-----------|
+| Usuário  | `dinamica` |
+| Senha    | `123`     |
 
 ### Alternativa com Docker Compose
 
@@ -108,4 +122,6 @@ npm run start  # produção local
 
 ## Deploy
 
-O projeto está preparado para deploy em plataformas que suportem Next.js (ex.: Vercel). O build Docker usa `output: "standalone"` para um runtime mínimo. Não inclua credenciais no repositório; use variáveis de ambiente do provedor para API e demais segredos.
+Aplicação publicada na **Vercel:** [innovation-brindes-frontend-challen.vercel.app](https://innovation-brindes-frontend-challen.vercel.app).
+
+O projeto está preparado para deploy em plataformas que suportem Next.js. O build Docker usa `output: "standalone"` para um runtime mínimo. Não inclua credenciais no repositório; use variáveis de ambiente do provedor para API e demais segredos.
