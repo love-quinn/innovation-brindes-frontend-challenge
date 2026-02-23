@@ -93,7 +93,7 @@ Não é obrigatório configurar variáveis de ambiente para rodar a aplicação.
 
 ## Pendências e melhorias
 
-- **Testes** — Não há testes E2E nem unitários no projeto. Sugestão: adicionar Jest ou Vitest para hooks/stores e Playwright ou Cypress para fluxos críticos (login, listagem, favoritos).
+- **Testes** — Incluídos testes unitários (Vitest + React Testing Library) e um smoke E2E (Playwright) para o fluxo login → produtos. Veja a seção “Rodando os Testes” abaixo.
 - **API sem paginação** — O endpoint de produtos devolve a lista inteira. A paginação é apenas no cliente (slice da lista em cache). Para muitos produtos, o ideal seria paginação ou cursor no backend.
 - **Outras limitações** — Token de auth apenas em cookie/localStorage (sem refresh token). Imagem LCP é pré-carregada no layout de `/produtos` quando há cookie; sem cookie o preload não ocorre.
 
@@ -117,6 +117,32 @@ npm run dev    # desenvolvimento
 npm run build
 npm run start  # produção local
 ```
+
+---
+
+## 🧪 Rodando os Testes
+
+### Testes unitários (Vitest + React Testing Library)
+
+Validam componentes de UI e o formulário de login (chamada à API mockada).
+
+```bash
+npm install
+npm run test
+```
+
+Para rodar com interface interativa: `npm run test:ui`.
+
+### Testes E2E (Playwright)
+
+Um smoke test valida o fluxo **login → redirecionamento para /produtos → exibição do grid de produtos**. As requisições à API são mockadas, então não é necessário backend rodando.
+
+```bash
+npx playwright install
+npm run test:e2e
+```
+
+O Playwright sobe o servidor de desenvolvimento (`npm run dev`) automaticamente antes dos testes.
 
 ---
 
