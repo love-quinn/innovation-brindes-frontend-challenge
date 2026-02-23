@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Loader, Mail, Phone } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { useProductModalStore } from "@/store/productModalStore";
@@ -33,9 +34,15 @@ function formatDatePT(date: Date) {
 }
 
 export default function ProdutosPage() {
+  const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const hasHydrated = useAuthStore((state) => state.hasHydrated);
   const logout = useAuthStore((state) => state.logout);
+
+  function handleLogout() {
+    logout();
+    router.replace("/login");
+  }
 
   if (!hasHydrated) {
     return (
@@ -141,7 +148,7 @@ export default function ProdutosPage() {
           </h1>
           <button
             type="button"
-            onClick={() => logout()}
+            onClick={handleLogout}
             aria-label="Sair da conta"
             className="cursor-pointer text-sm text-red-600 hover:text-red-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 rounded"
           >
