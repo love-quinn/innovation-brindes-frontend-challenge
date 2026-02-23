@@ -32,7 +32,9 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<LoginFormData>();
+  } = useForm<LoginFormData>({
+    defaultValues: { remember: true },
+  });
 
   const mutation = useMutation<LoginResponse, Error, LoginFormData>({
     mutationFn: ({ email, senha }) => loginRequest({ email, senha }),
@@ -63,7 +65,7 @@ export default function LoginPage() {
     mutation.mutate({
       email: data.email,
       senha: data.senha,
-      remember: data.remember,
+      remember: true,
     });
   }
 
@@ -140,16 +142,15 @@ export default function LoginPage() {
               <input
                 type="checkbox"
                 {...register("remember")}
-                aria-label="Manter logado"
-                className="cursor-pointer appearance-none w-4 h-4 border rounded 
-                hover:border-gray-200
-                checked:border-white relative
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#80bc04]
+                defaultChecked
+                disabled
+                aria-label="Manter logado (sempre ativo)"
+                className="cursor-default appearance-none w-4 h-4 border rounded border-white
+                bg-[#80bc04] relative
                 after:content-['✔']
                 after:absolute
                 after:text-white
-                after:opacity-0
-                checked:after:opacity-100
+                after:opacity-100
                 after:inset-0
                 after:flex
                 after:items-center
