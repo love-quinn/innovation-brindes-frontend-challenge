@@ -3,14 +3,24 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Phone } from "lucide-react";
+import { Loader, Mail, Phone } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
+import { useProductModalStore } from "@/store/productModalStore";
 import { ProductsSection } from "@/components/ProductsSection";
 
 const ProductModal = dynamic(
-  () => import("@/components/ProductModal").then((m) => ({ default: m.ProductModal })),
-  { ssr: false }
+  () =>
+    import("@/components/ProductModal").then((m) => ({
+      default: m.ProductModal,
+    })),
+  { ssr: false },
 );
+
+function LazyProductModal() {
+  const hasEverOpened = useProductModalStore((s) => s.hasEverOpened);
+  if (!hasEverOpened) return null;
+  return <ProductModal />;
+}
 
 function formatDatePT(date: Date) {
   const str = date.toLocaleDateString("pt-BR", {
@@ -24,12 +34,29 @@ function formatDatePT(date: Date) {
 
 export default function ProdutosPage() {
   const user = useAuthStore((state) => state.user);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
   const logout = useAuthStore((state) => state.logout);
+
+  if (!hasHydrated) {
+    return (
+      <div
+        className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 bg-white text-gray-900"
+        aria-live="polite"
+        aria-busy="true"
+      >
+        <div className="flex gap-2">
+          <Loader className="animate-spin text-lime-500" />
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 bg-white text-gray-900">
-        <p className="text-gray-600">Você precisa estar logado para acessar esta página.</p>
+        <p className="text-gray-600">
+          Você precisa estar logado para acessar esta página.
+        </p>
         <Link
           href="/login"
           className="text-[#80bc04] font-medium hover:underline"
@@ -48,7 +75,11 @@ export default function ProdutosPage() {
       <header className="bg-[#80bc04] text-white px-3 py-3 md:px-6 md:py-4">
         <div className="flex items-center justify-between gap-2 md:gap-4 w-full max-w-6xl mx-auto">
           {/* Logo */}
-          <Link href="/produtos" className="shrink-0" aria-label="Innovation Brindes">
+          <Link
+            href="/produtos"
+            className="shrink-0"
+            aria-label="Innovation Brindes"
+          >
             <Image
               src="/logo-innovation-brindes.png"
               alt="Innovation Brindes"
@@ -99,7 +130,11 @@ export default function ProdutosPage() {
         </div>
       </header>
 
-      <main id="main-content" className="p-4 md:p-8 max-w-6xl mx-auto" tabIndex={-1}>
+      <main
+        id="main-content"
+        className="p-4 md:p-8 max-w-6xl mx-auto"
+        tabIndex={-1}
+      >
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 pb-4 mb-6">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800">
             Produtos
@@ -107,6 +142,7 @@ export default function ProdutosPage() {
           <button
             type="button"
             onClick={() => logout()}
+            aria-label="Sair da conta"
             className="cursor-pointer text-sm text-red-600 hover:text-red-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 rounded"
           >
             Sair
@@ -114,7 +150,7 @@ export default function ProdutosPage() {
         </div>
 
         <ProductsSection />
-        <ProductModal />
+        <LazyProductModal />
 
         {/* Dados do usuário (resumido) */}
         <section className="mt-10 pt-8 border-t border-gray-200">
@@ -129,7 +165,9 @@ export default function ProdutosPage() {
               </dd>
             </div>
             <div className="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium text-gray-500">Código do usuário</dt>
+              <dt className="text-sm font-medium text-gray-500">
+                Código do usuário
+              </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 {user.codigo_usuario}
               </dd>
@@ -141,7 +179,9 @@ export default function ProdutosPage() {
               </dd>
             </div>
             <div className="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium text-gray-500">Código do grupo</dt>
+              <dt className="text-sm font-medium text-gray-500">
+                Código do grupo
+              </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 {user.codigo_grupo}
               </dd>

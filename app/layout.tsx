@@ -7,8 +7,9 @@ import { ToastContainer } from "react-toastify";
 import { SkipToContent } from "@/components/SkipToContent";
 
 const poppins = Poppins({
-    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+    weight: ["200", "400", "500", "600", "700"],
     subsets: ["latin"],
+    display: "swap",
   });
 
 export const metadata: Metadata = {
@@ -26,6 +27,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="preconnect" href="https://imgprodutos.s3.us-east-2.amazonaws.com" />
+        <link rel="dns-prefetch" href="https://imgprodutos.s3.us-east-2.amazonaws.com" />
+      </head>
       <body
         className={`${poppins.className} antialiased bg-white`}
       >

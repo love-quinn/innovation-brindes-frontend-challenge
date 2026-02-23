@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { Dialog, DialogPanel, DialogTitle, Description } from "@headlessui/react";
 import { X } from "lucide-react";
@@ -15,22 +16,31 @@ function formatPriceBRL(preco: string): string {
   });
 }
 
-function ProductModalContent({ product }: { product: Product }) {
+function ProductModalContent({
+  product,
+  closeButtonRef,
+}: {
+  product: Product;
+  closeButtonRef: React.RefObject<HTMLButtonElement | null>;
+}) {
+  const [imageError, setImageError] = useState(false);
   const close = useProductModalStore((s) => s.close);
   const priceFormatted = formatPriceBRL(product.preco);
   const showPrice = priceFormatted.length > 0;
+  const showImage = product.imagem && !imageError;
 
   return (
     <>
       <div className="relative shrink-0">
-        {product.imagem ? (
+        {showImage ? (
           <div className="relative w-full aspect-4/2 bg-gray-100 rounded-t-xl overflow-hidden">
             <Image
-              src={product.imagem}
+              src={product.imagem!}
               alt={product.nome}
               fill
               className="object-contain"
               sizes="(max-width: 300px) 100vw, 280px"
+              onError={() => setImageError(true)}
             />
           </div>
         ) : (
@@ -39,11 +49,11 @@ function ProductModalContent({ product }: { product: Product }) {
           </div>
         )}
         <button
+          ref={closeButtonRef}
           type="button"
           onClick={close}
-          data-autofocus
-          className="absolute top-3 right-3 p-2 rounded-full bg-white/90 text-gray-700 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2"
-          aria-label="Fechar"
+          className="absolute top-3 right-3 p-2 rounded-full bg-white/90 text-gray-700 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#80bc04] focus:ring-offset-2 focus-visible:ring-2 focus-visible:ring-[#80bc04] focus-visible:ring-offset-2"
+          aria-label="Fechar modal"
         >
           <X className="size-5" aria-hidden />
         </button>
@@ -94,6 +104,7 @@ function ProductModalContent({ product }: { product: Product }) {
 }
 
 export function ProductModal() {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const isOpen = useProductModalStore((s) => s.isOpen);
   const product = useProductModalStore((s) => s.product);
   const close = useProductModalStore((s) => s.close);
@@ -102,6 +113,7 @@ export function ProductModal() {
     <Dialog
       open={isOpen}
       onClose={close}
+      initialFocus={closeButtonRef}
       className="relative z-50"
       aria-labelledby="product-modal-title"
       aria-describedby="product-modal-description"
@@ -122,7 +134,7 @@ export function ProductModal() {
               <Description id="product-modal-description" className="sr-only">
                 Detalhes do produto: {product.nome}, código {product.codigo}.
               </Description>
-              <ProductModalContent product={product} />
+              <ProductModalContent product={product} closeButtonRef={closeButtonRef} />
             </>
           ) : null}
         </DialogPanel>

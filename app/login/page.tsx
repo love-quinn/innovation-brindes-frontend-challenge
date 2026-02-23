@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { loginRequest, type LoginResponse } from "@/services/auth";
 import { useAuthStore } from "@/store/authStore";
-import { FaUserAlt, FaUnlockAlt } from "react-icons/fa";
+import { User, Lock } from "lucide-react";
 import { useNotification } from "@/hooks/useNotification";
 
 interface LoginFormData {
@@ -84,9 +84,8 @@ export default function LoginPage() {
         >
           {/* USER */}
           <div className="w-full max-w-[280px] md:max-w-none md:w-[75%] relative">
-            <FaUserAlt
-              size="1em"
-              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none z-10"
+            <User
+              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 size-5 text-gray-500 pointer-events-none z-10"
               aria-hidden
             />
             <label htmlFor="login-email" className="sr-only">
@@ -111,9 +110,8 @@ export default function LoginPage() {
 
           {/* PASSWORD */}
           <div className="w-full max-w-[280px] md:max-w-none md:w-[75%] relative">
-            <FaUnlockAlt
-              size="1em"
-              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none z-10"
+            <Lock
+              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 size-5 text-gray-500 pointer-events-none z-10"
               aria-hidden
             />
             <label htmlFor="login-senha" className="sr-only">
@@ -142,9 +140,11 @@ export default function LoginPage() {
               <input
                 type="checkbox"
                 {...register("remember")}
+                aria-label="Manter logado"
                 className="cursor-pointer appearance-none w-4 h-4 border rounded 
                 hover:border-gray-200
                 checked:border-white relative
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#80bc04]
                 after:content-['✔']
                 after:absolute
                 after:text-white

@@ -28,6 +28,7 @@ interface AuthState {
   user: User | null
   isAuthenticated: boolean
   rememberMe: boolean
+  hasHydrated: boolean
 
   login: (
     token: string,
@@ -45,6 +46,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
   rememberMe: false,
+  hasHydrated: false,
 
   login: (token, user, remember) => {
     if (remember) {
@@ -85,7 +87,10 @@ export const useAuthStore = create<AuthState>((set) => ({
         user: JSON.parse(user),
         isAuthenticated: true,
         rememberMe: true,
+        hasHydrated: true,
       })
+    } else {
+      set({ hasHydrated: true })
     }
   },
 }))

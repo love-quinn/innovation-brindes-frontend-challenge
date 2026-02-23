@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { Gift, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import type { Product } from "@/services/products";
 import { useProductModalStore } from "@/store/productModalStore";
 import { useFavoritesStore } from "@/store/favoritesStore";
@@ -25,11 +26,23 @@ const PLACEHOLDER_COLORS = [
   "#a16207",
 ];
 
-export function ProductCard({ product }: { product: Product }) {
+const FALLBACK_IMAGE = "/box.png";
+
+export function ProductCard({
+  product,
+  isAboveFold = false,
+  isLcpCandidate = false,
+}: {
+  product: Product;
+  isAboveFold?: boolean;
+  isLcpCandidate?: boolean;
+}) {
+  const [imageError, setImageError] = useState(false);
   const openModal = useProductModalStore((s) => s.open);
   const isFavorite = useFavoritesStore((s) => s.isFavorite(product.codigo));
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
   const desc = product.descricao?.trim() ?? "";
+  const imageSrc = product.imagem && !imageError ? product.imagem : FALLBACK_IMAGE;
   const descriptionSnippet =
     desc.length > 70 ? desc.slice(0, 70).trim() + "..." : desc || "";
 
@@ -51,11 +64,15 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="relative bg-white pb-10 flex items-center justify-center">
           <div className="relative w-full aspect-square max-h-[170px] overflow-visible min-h-[120px]">
             <Image
-              src={product.imagem || "/placeholder.png"}
+              src={imageSrc}
               alt={product.nome}
               fill
               className="object-contain"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              priority={isLcpCandidate}
+              fetchPriority={isLcpCandidate ? "high" : undefined}
+              loading={isAboveFold && !isLcpCandidate ? "eager" : undefined}
+              onError={() => setImageError(true)}
             />
 
             {/* Favorito (top-left) - click não abre modal */}
@@ -85,13 +102,14 @@ export function ProductCard({ product }: { product: Product }) {
               className="absolute -bottom-10 left-0 w-fit border border-l-0 rounded-t-lg bg-white p-2
                  flex items-center gap-2 overflow-visible z-20"
             >
-              {/* ÍCONE decorativo (overflow pra cima) */}
-              <div className="absolute -top-2 bg-white left-1 w-14 h-14" aria-hidden>
+              {/* ÍCONE decorativo (overflow pra cima) - stable 56px box for CLS */}
+              <div className="absolute -top-2 bg-white left-1 w-14 h-14 shrink-0" aria-hidden>
                 <Image
                   src="/box.png"
                   alt=""
                   fill
                   className="object-contain"
+                  sizes="56px"
                 />
               </div>
 

@@ -169,8 +169,13 @@ export function ProductsSection() {
       ) : (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
-            {displayProducts.map((product) => (
-              <ProductCard key={product.codigo} product={product} />
+            {displayProducts.map((product, index) => (
+              <ProductCard
+                key={product.codigo}
+                product={product}
+                isAboveFold={index < 8}
+                isLcpCandidate={index === 0}
+              />
             ))}
           </div>
           <div ref={loadMoreRef} className="h-4 mt-4" aria-hidden />
